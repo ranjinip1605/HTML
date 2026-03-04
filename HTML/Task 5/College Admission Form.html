@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>college admission form</title>
+    </head>
+    <body>
+        <h2 align="center">Admission Form</h2>
+        <form>
+            <fieldset>
+                <legend><b>Personal Information</b></legend>
+
+                <label><b>Name:</b></label><br>
+                <input type="text" required><br><br>
+
+                <label><b>Email:</b></label><br>
+                <input type="email" required><br><br>
+
+                <label><b>Phone:</b></label><br>
+                <input type="text" pattern="[0-9]{10}" placeholder="10 digit number" required><br><br>
+            </fieldset>
+            <br>
+            <fieldset>
+                <legend><b>Course Details</b></legend>
+
+                <label><b><Choose Course></b></label><br>
+                <select required>
+                    <option value="">--Select--</option>
+                    <option>B.Tech(AIDS)</option>
+                    <option>BE(CSE)</option>
+                    <option>BE(Cyber Security)</option>
+                    <option>B.Tech(Information Technology)</option>
+                </select>    
+            </fieldset>
+        </form>
+    </body>
+</html>
