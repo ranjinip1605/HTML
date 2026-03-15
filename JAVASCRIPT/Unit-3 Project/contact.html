@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Contact Us - CityCare Hospital</title>
+
+<style>
+
+/* ===== COLOR THEME ===== */
+
+:root{
+--sea-blue:#1E88E5;
+--dark-blue:#0D47A1;
+--light-blue:#E3F2FD;
+--white:#ffffff;
+--text:#2C3E50;
+--accent:#FFC107;
+}
+
+/* ===== GENERAL ===== */
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:var(--light-blue);
+color:var(--text);
+}
+
+/* ===== HEADER ===== */
+
+header{
+background:var(--sea-blue);
+color:white;
+text-align:center;
+padding:20px;
+font-size:22px;
+}
+
+/* ===== NAVBAR ===== */
+
+nav{
+background:var(--dark-blue);
+padding:12px;
+text-align:center;
+position:sticky;
+top:0;
+z-index:1000;
+}
+
+nav a{
+color:white;
+margin:0 18px;
+text-decoration:none;
+font-weight:bold;
+transition:0.3s;
+}
+
+nav a:hover{
+color:var(--accent);
+}
+
+/* ===== HERO ===== */
+
+.hero{
+background:url("https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=1600");
+background-size:cover;
+background-position:center;
+height:260px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+font-size:38px;
+font-weight:bold;
+text-shadow:2px 2px 6px rgba(0,0,0,0.5);
+}
+
+/* ===== CONTACT SECTION ===== */
+
+.container{
+display:flex;
+justify-content:center;
+flex-wrap:wrap;
+gap:40px;
+padding:60px 10%;
+}
+
+/* ===== CONTACT FORM ===== */
+
+form{
+background:white;
+padding:30px;
+width:380px;
+border-radius:10px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
+transition:0.3s;
+}
+
+form:hover{
+transform:translateY(-5px);
+}
+
+form h2{
+color:var(--sea-blue);
+}
+
+input,textarea{
+width:100%;
+padding:10px;
+margin-top:8px;
+margin-bottom:15px;
+border-radius:5px;
+border:1px solid #ccc;
+font-size:14px;
+}
+
+button{
+background:var(--sea-blue);
+color:white;
+border:none;
+padding:12px;
+width:100%;
+border-radius:6px;
+cursor:pointer;
+font-size:15px;
+transition:0.3s;
+}
+
+button:hover{
+background:var(--dark-blue);
+}
+
+/* ===== CONTACT INFO ===== */
+
+.info{
+background:white;
+padding:30px;
+width:320px;
+border-radius:10px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
+transition:0.3s;
+}
+
+.info:hover{
+transform:translateY(-5px);
+}
+
+.info h3{
+color:var(--sea-blue);
+margin-top:15px;
+}
+
+/* ===== MAP ===== */
+
+.map iframe{
+width:100%;
+height:200px;
+border:none;
+border-radius:8px;
+margin-top:15px;
+}
+
+/* ===== POPUP ===== */
+
+.popup{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+justify-content:center;
+align-items:center;
+}
+
+.popup-content{
+background:white;
+padding:30px;
+border-radius:10px;
+text-align:center;
+width:320px;
+}
+
+.popup-content h2{
+color:var(--sea-blue);
+}
+
+/* ===== FOOTER ===== */
+
+footer{
+background:var(--dark-blue);
+color:white;
+text-align:center;
+padding:20px;
+margin-top:40px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+CityCare Hospital
+</header>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="services.html">Services</a>
+<a href="doctors.html">Doctors</a>
+<a href="consultation.html">Consultation</a>
+<a href="pharmacy.html">Pharmacy</a>
+<a href="appointment.html">Appointment</a>
+<a href="about.html">About</a>
+<a href="contact.html">Contact</a>
+</nav>
+
+<div class="hero">
+Contact Us
+</div>
+
+<div class="container">
+
+<!-- CONTACT FORM -->
+
+<form onsubmit="showPopup(event)">
+
+<h2>Send Message</h2>
+
+<label>Name</label> <input type="text" placeholder="Enter your name" required>
+
+<label>Email</label> <input type="email" placeholder="Enter your email" required>
+
+<label>Message</label>
+
+<textarea rows="4" placeholder="Type your message..." required></textarea>
+
+<button type="submit">Send Message</button>
+
+</form>
+
+<!-- CONTACT INFO -->
+
+<div class="info">
+
+<h3>📍 Hospital Address</h3>
+<p>123 Health Street<br>
+Medical City, India</p>
+
+<h3>📞 Phone</h3>
+<p>+91 9876543210</p>
+
+<h3>📧 Email</h3>
+<p>info@citycarehospital.com</p>
+
+<div class="map">
+
+<iframe
+src="https://maps.google.com/maps?q=hospital&t=&z=13&ie=UTF8&iwloc=&output=embed">
+</iframe>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- SUCCESS POPUP -->
+
+<div class="popup" id="popup">
+
+<div class="popup-content">
+
+<h2>Message Sent!</h2>
+
+<p>Thank you for contacting CityCare Hospital. Our team will respond soon.</p>
+
+<button onclick="closePopup()">Close</button>
+
+</div>
+
+</div>
+
+<footer>
+<p>© 2026 CityCare Hospital | 24/7 Emergency Care</p>
+<p>Phone: +91 98765 43210 | Email: citycarehospital@gmail.com</p>
+</footer>
+
+<script>
+
+function showPopup(e){
+e.preventDefault();
+document.getElementById("popup").style.display="flex";
+}
+
+function closePopup(){
+document.getElementById("popup").style.display="none";
+}
+
+</script>
+
+</body>
+</html>
