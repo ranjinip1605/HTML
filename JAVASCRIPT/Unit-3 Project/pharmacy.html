@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Pharmacy - CityCare Hospital</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#f4f9fc;
+}
+
+/* HEADER */
+header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 8%;
+background:#1E88E5;
+color:white;
+font-size:22px;
+letter-spacing:1px;
+}
+
+header h1{
+margin:0;
+}
+
+/* Upload Prescription Button */
+.upload-prescription{
+background:#ffd700;
+color:#085a86;
+border:none;
+padding:10px 18px;
+border-radius:6px;
+font-weight:bold;
+cursor:pointer;
+}
+
+/* CART BUTTON */
+.cart-btn{
+background:#ffd700;
+border:none;
+padding:8px 14px;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+}
+
+nav{
+background:#085a86;
+padding:12px;
+text-align:center;
+position:sticky;
+top:0;
+z-index:1000;
+}
+
+nav a{
+color:white;
+margin:0 18px;
+text-decoration:none;
+font-weight:bold;
+font-size:15px;
+}
+
+nav a:hover{
+color:#ffd700;
+}
+
+/* HERO */
+.hero{
+background:url("https://images.unsplash.com/photo-1587854692152-cbe660dbde88");
+background-size:cover;
+background-position:center;
+height:250px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#ffffff;
+font-size:32px;
+font-weight:bold;
+}
+
+/* MEDICINE GRID */
+section{
+padding:60px 10%;
+}
+
+.medicines{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:25px;
+}
+
+.medicine{
+background:white;
+padding:20px;
+border-radius:10px;
+text-align:center;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+transition:0.3s;
+}
+
+.medicine:hover{
+transform:translateY(-8px);
+}
+
+.medicine img{
+width:100%;
+height:150px;
+object-fit:cover;
+border-radius:8px;
+}
+
+button{
+margin-top:10px;
+background:#62add5;
+color:white;
+border:none;
+padding:8px 15px;
+border-radius:5px;
+cursor:pointer;
+}
+
+/* CART MODAL */
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+justify-content:center;
+align-items:center;
+}
+
+.modal-content{
+background:white;
+padding:25px;
+border-radius:10px;
+width:320px;
+text-align:center;
+}
+
+footer{
+background:#62add5;
+color:white;
+text-align:center;
+padding:20px;
+margin-top:40px;
+}
+
+.see-more{
+display:block;
+margin-top:10px;
+color:#085a86;
+font-weight:bold;
+text-decoration:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>CityCare Hospital</h1>
+
+<button class="upload-prescription" onclick="uploadPrescription()">Upload Prescription</button>
+
+<button class="cart-btn" onclick="openCart()">
+Cart (<span id="cartCount">0</span>)
+</button>
+
+</header>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="services.html">Services</a>
+<a href="doctors.html">Doctors</a>
+<a href="consultation.html">Consultation</a>
+<a href="pharmacy.html">Pharmacy</a>
+<a href="appointment.html">Appointment</a>
+<a href="about.html">About</a>
+<a href="contact.html">Contact</a>
+</nav>
+
+<div class="hero">
+Hospital Pharmacy
+</div>
+
+<section>
+
+<h2>Available Medicines</h2>
+
+<div class="medicines">
+
+<div class="medicine">
+<img src="C:\Users\USER\Downloads\headache, bone ache etc.jpg">
+<h3>Paracetamol</h3>
+<p>Pain relief tablet</p>
+<button onclick="orderMedicine('Paracetamol')">Order</button>
+<button onclick="addToCart('Paracetamol')">Add to Cart</button>
+</div>
+
+<div class="medicine">
+<img src="C:\Users\USER\Downloads\1000mg Vitamin C Tablets for Adults Immunity.jpg">
+<h3>Vitamin C</h3>
+<p>Immunity booster</p>
+<button onclick="orderMedicine('Vitamin C')">Order</button>
+<button onclick="addToCart('Vitamin C')">Add to Cart</button>
+</div>
+
+<div class="medicine">
+<img src="C:\Users\USER\Downloads\Alternative Antibiotics in Survival - Preparing for shtf.jpg">
+<h3>Antibiotics</h3>
+<p>Bacterial infection treatment</p>
+<button onclick="orderMedicine('Antibiotics')">Order</button>
+<button onclick="addToCart('Antibiotics')">Add to Cart</button>
+</div>
+
+<div class="medicine">
+<img src="C:\Users\USER\Downloads\Lantus (Insulin Glargine Injection) 100 units_ml Solostar 0 Size_ 3 mL.jpg">
+<h3>Insulin</h3>
+<p>Diabetes treatment</p>
+<button onclick="orderMedicine('Insulin')">Order</button>
+<button onclick="addToCart('Insulin')">Add to Cart</button>
+</div>
+
+<div class="medicine">
+<img src="C:\Users\USER\Downloads\download (6).jpg">
+<h3>Ibuprofen</h3>
+<p>Pain and inflammation relief</p>
+<button onclick="orderMedicine('Ibuprofen')">Order</button>
+<button onclick="addToCart('Ibuprofen')">Add to Cart</button>
+</div>
+
+<div class="medicine">
+<img src="C:\Users\USER\Downloads\MDX_ 500mg.jpg">
+<h3>Amoxicillin</h3>
+<p>Antibiotic medicine</p>
+<button onclick="orderMedicine('Amoxicillin')">Order</button>
+<button onclick="addToCart('Amoxicillin')">Add to Cart</button>
+</div>
+
+<div class="medicine">
+<img src="C:\Users\USER\Downloads\Caltrate Bone & Muscle Health Tablet 100.jpg">
+<h3>Calcium Tablets</h3>
+<p>Bone health supplement</p>
+<button onclick="orderMedicine('Calcium Tablets')">Order</button>
+<button onclick="addToCart('Calcium Tablets')">Add to Cart</button>
+</div>
+
+<div class="medicine">
+<img src="C:\Users\USER\Downloads\Effective Cough Solution.jpg">
+<h3>Cough Syrup</h3>
+<p>Cold & cough relief</p>
+<button onclick="orderMedicine('Cough Syrup')">Order</button>
+<button onclick="addToCart('Cough Syrup')">Add to Cart</button>
+<a href="#" class="see-more">See More →</a>
+</div>
+
+</div>
+
+</section>
+
+<!-- CART MODAL -->
+
+<div id="cartModal" class="modal">
+
+<div class="modal-content">
+
+<h2>Your Cart</h2>
+
+<div id="cartItems"></div>
+
+<br>
+
+<button onclick="checkout()">Checkout</button>
+<button onclick="closeCart()">Close</button>
+
+</div>
+
+</div>
+
+<footer>
+<p>© 2026 CityCare Hospital | 24/7 Emergency Care</p>
+<p>Phone: +91 98765 43210 | Email: citycarehospital@gmail.com</p>
+</footer>
+
+<script>
+
+let cart=[];
+
+function addToCart(item){
+
+cart.push(item);
+
+document.getElementById("cartCount").innerText=cart.length;
+
+alert(item+" added to cart");
+
+}
+
+function openCart(){
+
+let list="";
+
+cart.forEach((item,index)=>{
+
+list+=item+" <button onclick='removeItem("+index+")'>X</button><br>";
+
+});
+
+document.getElementById("cartItems").innerHTML=list;
+
+document.getElementById("cartModal").style.display="flex";
+
+}
+
+function closeCart(){
+document.getElementById("cartModal").style.display="none";
+}
+
+function removeItem(index){
+
+cart.splice(index,1);
+
+document.getElementById("cartCount").innerText=cart.length;
+
+openCart();
+
+}
+
+function checkout(){
+
+alert("Order placed successfully! Medicines will be delivered soon.");
+
+cart=[];
+
+document.getElementById("cartCount").innerText=0;
+
+closeCart();
+
+}
+
+/* Upload Prescription */
+
+function uploadPrescription(){
+
+let fileInput=document.createElement("input");
+
+fileInput.type="file";
+
+fileInput.accept="image/*,.pdf";
+
+fileInput.onchange=()=>{
+
+alert("Prescription uploaded successfully!");
+
+};
+
+fileInput.click();
+
+}
+
+</script>
+
+</body>
+</html>

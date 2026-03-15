@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CityCare Hospital</title>
+
+<style>
+:root{
+--sea-blue:#1E88E5;
+--dark-blue:#0D47A1;
+--light-blue:#E3F2FD;
+--white:#ffffff;
+--text:#2C3E50;
+--accent:#FFC107;
+}
+
+/* ===== GENERAL ===== */
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:var(--light-blue);
+color:var(--text);
+}
+
+/* ===== HEADER ===== */
+header{
+display:flex;
+justify-content:center;
+align-items:center;
+padding:20px;
+background:var(--sea-blue);
+color:var(--white);
+position:sticky;
+top:0;
+z-index:1000;
+}
+header h1{margin:0;}
+
+/* ===== NAVBAR ===== */
+nav{
+background:var(--dark-blue);
+padding:12px;
+text-align:center;
+}
+nav a{
+color:var(--white);
+margin:0 18px;
+text-decoration:none;
+font-weight:bold;
+font-size:15px;
+transition:0.3s;
+}
+nav a:hover{color:var(--accent);}
+button{background:var(--sea-blue);color:white;border:none;padding:10px 18px;border-radius:6px;cursor:pointer;transition:0.3s;}
+button:hover{background:var(--dark-blue);}
+.login-btn{margin-left:10px;}
+.logout-btn{background:#e53935;margin-left:5px;}
+
+/* ===== HERO SLIDER ===== */
+.hero{position:relative;height:450px;overflow:hidden;}
+.hero video{position:absolute;width:100%;height:100%;object-fit:cover;top:0;left:0;}
+.hero-text{position:absolute;bottom:60px;left:60px;background:rgba(0,0,0,0.55);color:white;padding:25px;border-radius:10px;}
+.hero-text h2{margin:0;}
+.hero-text p{margin:10px 0;}
+
+/* ===== SIDE MENU ===== */
+.side-menu{
+position:fixed;right:0;top:200px;background:var(--sea-blue);color:white;padding:15px;border-radius:10px 0 0 10px;z-index:1000;
+}
+.side-menu h4{margin:0 0 10px 0;font-size:18px;}
+.side-menu a{display:block;color:white;margin-bottom:10px;font-weight:bold;}
+.side-menu a:hover{color:var(--accent);}
+
+/* ===== PATIENT FACILITIES ===== */
+section{padding:60px 10%;}
+h2{text-align:center;color:var(--sea-blue);margin-bottom:40px;}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:30px;}
+.feature-card{background:var(--white);padding:25px;border-radius:10px;box-shadow:0 5px 15px rgba(0,0,0,0.1);text-align:center;transition:0.3s;}
+.feature-card:hover{transform:translateY(-10px);box-shadow:0 10px 25px rgba(0,0,0,0.15);}
+.feature-card button{margin-top:10px;background:var(--sea-blue);color:white;border:none;padding:8px 15px;border-radius:5px;cursor:pointer;transition:0.3s;}
+.feature-card button:hover{background:var(--dark-blue);}
+
+/* ===== HEALTH TIPS ===== */
+.tips{display:flex;flex-wrap:wrap;justify-content:center;gap:20px;}
+.tip{background:var(--white);padding:20px;border-radius:8px;width:220px;text-align:center;font-weight:bold;transition:0.3s;box-shadow:0 3px 8px rgba(0,0,0,0.1);}
+.tip:hover{transform:scale(1.05);background:var(--light-blue);}
+
+/* ===== STATS ===== */
+.stats{display:flex;justify-content:space-around;background:var(--white);padding:50px;flex-wrap:wrap;}
+.stat{text-align:center;margin:20px;}
+.stat h1{color:var(--sea-blue);font-size:40px;}
+
+/* ===== LOGIN MODAL ===== */
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;}
+.modal-content{background:white;padding:30px;border-radius:10px;text-align:center;width:300px;}
+.modal-content input{width:90%;padding:8px;margin-bottom:10px;border:1px solid #ccc;border-radius:4px;}
+
+/* ===== POPUP ===== */
+.popup{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);justify-content:center;align-items:center;}
+.popup-content{background:white;padding:30px;border-radius:10px;width:400px;text-align:center;}
+.popup-content p{font-size:16px;}
+
+/* ===== FOOTER ===== */
+footer{background:var(--dark-blue);color:white;text-align:center;padding:20px;margin-top:40px;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+<h1>CityCare Hospital</h1>
+</header>
+
+<!-- NAVBAR -->
+<nav>
+<a href="index.html">Home</a>
+<a href="services.html">Services</a>
+<a href="doctors.html">Doctors</a>
+<a href="consultation.html">Consultation</a>
+<a href="pharmacy.html">Pharmacy</a>
+<a href="appointment.html">Appointment</a>
+<a href="about.html">About</a>
+<a href="contact.html">Contact</a>
+<button onclick="openLogin()" class="login-btn">Login</button>
+<button onclick="logout()" id="logoutBtn" class="logout-btn" style="display:none;">Logout</button>
+</nav>
+
+<!-- HERO VIDEO -->
+<div class="hero">
+  <video autoplay muted loop>
+    <source src="C:\Users\USER\Downloads\istockphoto-1212413530-640_adpp_is.mp4" type="video/mp4">
+    Your browser does not support HTML video.
+  </video>
+  <div class="hero-text">
+    <h2>Your Health, Our Priority</h2>
+    <p>24/7 Emergency | Trusted Doctors | Advanced Treatment</p>
+    <a href="appointment.html"><button>Book Appointment</button></a>
+  </div>
+</div>
+
+<!-- SIDE MENU -->
+<div class="side-menu">
+<h4>Quick Links</h4>
+<a href="consultation.html">Online Consultation</a>
+<a href="appointment.html">Book Appointment</a>
+<a href="pharmacy.html">Pharmacy</a>
+<a href="contact.html">Contact Us</a>
+</div>
+
+<!-- PATIENT FACILITIES -->
+<section>
+<h2>Patient Facilities</h2>
+<div class="features">
+<div class="feature-card">
+<h3>24/7 Emergency</h3>
+<p>Immediate emergency care and ambulance services.</p>
+<button onclick="callAmbulance()">Call Ambulance</button>
+</div>
+<div class="feature-card">
+<h3>Online Appointment</h3>
+<p>Book doctor appointments online easily.</p>
+<button onclick="showInfo('Book appointments with your preferred doctor quickly.')">Learn More</button>
+</div>
+<div class="feature-card">
+<h3>Health Packages</h3>
+<p>Affordable medical checkup packages.</p>
+<button onclick="showInfo('Choose from a variety of health checkup packages.')">Learn More</button>
+</div>
+<div class="feature-card">
+<h3>Pharmacy</h3>
+<p>24/7 pharmacy with genuine medicines.</p>
+<button onclick="showInfo('Order medicines online or visit our pharmacy.')">Learn More</button>
+</div>
+</div>
+</section>
+
+<!-- HEALTH TIPS -->
+<section>
+<h2>Daily Health Tips</h2>
+<div class="tips">
+<div class="tip">Drink 8 glasses of water daily.</div>
+<div class="tip">Exercise regularly for a healthy heart.</div>
+<div class="tip">Sleep at least 7 hours every day.</div>
+<div class="tip">Eat more fruits and vegetables.</div>
+</div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+<div class="stat"><h1 id="patients">0</h1><p>Patients Treated</p></div>
+<div class="stat"><h1 id="doctors">0</h1><p>Expert Doctors</p></div>
+<div class="stat"><h1 id="years">0</h1><p>Years Experience</p></div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div id="loginModal" class="modal">
+<div class="modal-content">
+<h2>User Login</h2>
+<input type="text" id="name" placeholder="Enter Name">
+<input type="email" id="email" placeholder="Enter Email">
+<input type="password" id="password" placeholder="Enter Password"><br>
+<button onclick="saveUser()">Login / Register</button>
+<button onclick="closeLogin()">Close</button>
+</div>
+</div>
+
+<!-- POPUP INFO -->
+<div class="popup" id="popup">
+<div class="popup-content">
+<p id="popupText"></p>
+<button onclick="closePopup()">Close</button>
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+<p>© 2026 CityCare Hospital | 24/7 Emergency Care</p>
+<p>Phone: +91 98765 43210 | Email: citycarehospital@gmail.com</p>
+</footer>
+
+<script>
+// Counters
+function counter(id,target){
+let count=0;
+let interval=setInterval(()=>{
+count++;
+document.getElementById(id).innerText=count;
+if(count>=target) clearInterval(interval);
+},20);
+}
+counter("patients",500);
+counter("doctors",50);
+counter("years",20);
+
+// Login Modal
+function openLogin(){document.getElementById("loginModal").style.display="flex";}
+function closeLogin(){document.getElementById("loginModal").style.display="none";}
+function saveUser(){
+let name=document.getElementById("name").value;
+let email=document.getElementById("email").value;
+let password=document.getElementById("password").value;
+let user={name,email,password};
+localStorage.setItem("user",JSON.stringify(user));
+alert("Login Successful!");
+document.getElementById("loginModal").style.display="none";
+document.getElementById("logoutBtn").style.display="inline-block";
+}
+function logout(){localStorage.removeItem("user");alert("Logged out successfully");location.reload();}
+window.onload=function(){let user=localStorage.getItem("user");if(user){document.getElementById("logoutBtn").style.display="inline-block";}}
+
+// Popup info
+function showInfo(text){
+document.getElementById("popupText").innerText=text;
+document.getElementById("popup").style.display="flex";
+}
+function closePopup(){document.getElementById("popup").style.display="none";}
+
+// Call Ambulance
+function callAmbulance(){
+window.location.href="tel:108";
+}
+</script>
+</body>
+</html>
