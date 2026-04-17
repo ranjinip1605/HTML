@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CityCare Hospital - Services</title>
+
+<style>
+
+/* GENERAL */
+body{
+  margin:0;
+  font-family:Arial, Helvetica, sans-serif;
+  background:linear-gradient(to right,#eaf6ff,#ffffff);
+}
+
+/* HEADER */
+header{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  background:#1E88E5;
+  color:white;
+  text-align:center;
+  font-size:22px;
+  letter-spacing:1px;
+}
+
+/* NAVBAR */
+nav{
+  background:#085a86;
+  padding:12px;
+  text-align:center;
+  position:sticky;
+  top:0;
+  z-index:1000;
+}
+
+nav a{
+  color:white;
+  margin:0 18px;
+  text-decoration:none;
+  font-weight:bold;
+  font-size:15px;
+  transition:0.3s;
+}
+
+nav a:hover{
+  color:#ffd700;
+}
+
+/* HERO */
+.hero{
+  background:url("https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=1200");
+  background-size:cover;
+  background-position:center;
+  height:250px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:white;
+  font-size:35px;
+  font-weight:bold;
+  text-shadow:2px 2px 6px rgba(0,0,0,0.5);
+}
+
+/* SERVICES SECTION */
+section{
+  padding:60px 10%;
+}
+
+h2{
+  text-align:center;
+  color:#0b6fa4;
+  margin-bottom:40px;
+}
+
+/* SERVICE GRID */
+.services{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:30px;
+}
+
+/* CARD */
+.card{
+  background:white;
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+  transition:0.3s;
+  animation:fade 1s;
+}
+
+.card:hover{
+  transform:translateY(-10px);
+  box-shadow:0 10px 20px rgba(0,0,0,0.2);
+}
+
+.card img{
+  width:100%;
+  height:200px;
+  object-fit:cover;
+  border-radius:10px 10px 0 0;
+}
+
+.card-content{
+  padding:20px;
+  text-align:center;
+}
+
+.card-content h3{
+  color:#0b6fa4;
+  margin-bottom:10px;
+}
+
+.card-content p{
+  font-size:14px;
+  color:#555;
+}
+
+.card-content button{
+  background:#0b6fa4;
+  color:white;
+  border:none;
+  padding:8px 15px;
+  border-radius:5px;
+  cursor:pointer;
+  margin-top:10px;
+  transition:0.3s;
+}
+
+.card-content button:hover{
+  background:#095a85;
+}
+
+/* INFO SECTION */
+.info{
+  background:#eaf6ff;
+  padding:50px;
+  text-align:center;
+}
+
+.info h2{
+  margin-bottom:20px;
+}
+
+.info p{
+  max-width:800px;
+  margin:auto;
+  font-size:18px;
+  line-height:1.6;
+}
+
+/* POPUP */
+.popup{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6);
+  justify-content:center;
+  align-items:center;
+}
+
+.popup-content{
+  background:white;
+  padding:30px;
+  border-radius:10px;
+  width:400px;
+  text-align:center;
+}
+
+/* FOOTER */
+footer{
+  background:#0b6fa4;
+  color:white;
+  text-align:center;
+  padding:20px;
+  margin-top:40px;
+}
+
+/* ANIMATION */
+@keyframes fade{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1;}
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>CityCare Hospital</h1>
+</header>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="services.html">Services</a>
+<a href="doctors.html">Doctors</a>
+<a href="consultation.html">Consultation</a>
+<a href="pharmacy.html">Pharmacy</a>
+<a href="appointment.html">Appointment</a>
+<a href="about.html">About</a>
+<a href="contact.html">Contact</a>
+</nav>
+
+<div class="hero">
+Our Medical Services
+</div>
+
+<section>
+<h2>Healthcare Services We Provide</h2>
+
+<div class="services">
+
+<!-- Emergency Card -->
+<div class="card">
+<img src="https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=800" alt="Emergency Care">
+<div class="card-content">
+<h3>Emergency Care</h3>
+<p>24/7 emergency medical care for critical patients.</p>
+<button onclick="showInfo('Emergency Care available 24/7 with advanced ICU facilities.')">Learn More</button>
+</div>
+</div>
+
+<!-- Outpatient Card -->
+<div class="card">
+<img src="https://images.unsplash.com/photo-1579684385127-1ef15d508118?w=800" alt="Outpatient Services">
+<div class="card-content">
+<h3>Outpatient Services</h3>
+<p>Consult experienced doctors without hospital admission.</p>
+<button onclick="showInfo('Outpatient department provides consultation and minor treatments.')">Learn More</button>
+</div>
+</div>
+
+<!-- Laboratory Card -->
+<div class="card">
+<img src="https://images.unsplash.com/photo-1581595219315-a187dd40c322?w=800" alt="Laboratory">
+<div class="card-content">
+<h3>Laboratory</h3>
+<p>Modern diagnostic laboratory with accurate testing.</p>
+<button onclick="showInfo('Advanced lab testing including blood tests, pathology and diagnostics.')">Learn More</button>
+</div>
+</div>
+
+<!-- Pharmacy Card -->
+<div class="card">
+<img src="https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=800" alt="Pharmacy">
+<div class="card-content">
+<h3>Pharmacy</h3>
+<p>24-hour pharmacy with certified medicines.</p>
+<button onclick="showInfo('Our pharmacy provides quality medicines with professional guidance.')">Learn More</button>
+</div>
+</div>
+
+<!-- Ambulance Card -->
+<div class="card">
+<img src="https://images.unsplash.com/photo-1600959907703-125ba1374a12?w=800" alt="Ambulance">
+<div class="card-content">
+<h3>Ambulance</h3>
+<p>Fast emergency ambulance services available 24/7.</p>
+<button onclick="showInfo('Ambulance service equipped with advanced life support systems.')">Learn More</button>
+<br>
+<!-- Call Ambulance Button -->
+<a href="tel:108"><button style="background:#d32f2f;">Call Ambulance</button></a>
+</div>
+</div>
+
+<!-- Surgery Card -->
+<div class="card">
+<img src="https://images.unsplash.com/photo-1584515933487-779824d29309?w=800" alt="Surgery">
+<div class="card-content">
+<h3>Surgery</h3>
+<p>Modern operation theatres with expert surgeons.</p>
+<button onclick="showInfo('We provide safe and advanced surgical treatments.')">Learn More</button>
+</div>
+</div>
+
+</div>
+</section>
+
+<div class="info">
+<h2>Why Choose CityCare Hospital?</h2>
+<p>
+CityCare Hospital provides high quality healthcare with modern medical technology,
+experienced doctors and patient-centered care. Our hospital focuses on safety,
+comfort and quick recovery for every patient.
+</p>
+</div>
+
+<!-- POPUP -->
+<div class="popup" id="popup">
+<div class="popup-content">
+<p id="popupText"></p>
+<button onclick="closePopup()">Close</button>
+</div>
+</div>
+
+<footer>
+<p>© 2026 CityCare Hospital | 24/7 Emergency Care</p>
+<p>Phone: +91 98765 43210 | Email: citycarehospital@gmail.com</p>
+</footer>
+
+<script>
+/* POPUP INFO */
+function showInfo(text){
+  document.getElementById("popupText").innerText = text;
+  document.getElementById("popup").style.display = "flex";
+}
+function closePopup(){
+  document.getElementById("popup").style.display = "none";
+}
+</script>
+
+</body>
+</html>

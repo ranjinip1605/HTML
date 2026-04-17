@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>Our Doctors</title>
+
+<style>
+
+body{
+font-family:Arial;
+margin:0;
+background:linear-gradient(to right,#eaf6ff,#f9fdff);
+}
+
+/* HEADER */
+
+header{
+background:#1E88E5;
+color:white;
+padding:20px;
+text-align:center;
+}
+
+/* NAVBAR */
+
+nav{
+background:#085a86;
+padding:10px;
+text-align:center;
+}
+
+nav a{
+color:white;
+margin:0 15px;
+text-decoration:none;
+font-weight:bold;
+}
+
+nav a:hover{
+text-decoration:underline;
+}
+
+/* FILTER */
+
+.filter{
+text-align:center;
+margin:30px;
+}
+
+.filter select{
+padding:10px;
+font-size:16px;
+border-radius:5px;
+}
+
+/* GRID */
+
+.container{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:30px;
+padding:40px;
+}
+
+/* CARD */
+
+.card{
+background:white;
+border-radius:12px;
+box-shadow:0 6px 15px rgba(0,0,0,0.1);
+text-align:center;
+padding:20px;
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-10px);
+box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+.card img{
+width:140px;
+height:140px;
+border-radius:50%;
+margin-bottom:10px;
+}
+
+.card h3{
+color:#0b6fa4;
+margin:10px 0;
+}
+header{
+background:#0b6fa4;
+color:white;
+padding:20px;
+text-align:center;
+font-size:22px;
+letter-spacing:1px;
+}
+
+nav{
+background:#085a86;
+padding:12px;
+text-align:center;
+position:sticky;
+top:0;
+z-index:1000;
+}
+
+nav a{
+color:white;
+margin:0 18px;
+text-decoration:none;
+font-weight:bold;
+font-size:15px;
+transition:0.3s;
+}
+
+nav a:hover{
+color:#ffd700;
+}
+.card button{
+background:#0b6fa4;
+color:white;
+border:none;
+padding:8px 18px;
+border-radius:5px;
+cursor:pointer;
+}
+
+.card button:hover{
+background:#084d73;
+}
+
+/* PROFILE MODAL */
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.6);
+justify-content:center;
+align-items:center;
+}
+
+.modal-content{
+background:white;
+padding:30px;
+border-radius:10px;
+width:350px;
+text-align:center;
+position:relative;
+}
+
+.close{
+position:absolute;
+right:15px;
+top:10px;
+font-size:25px;
+cursor:pointer;
+}
+.search{
+text-align:center;
+margin-top:30px;
+}
+
+.search input{
+width:320px;
+padding:10px;
+font-size:16px;
+border-radius:6px;
+border:1px solid #ccc;
+box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+.search input:focus{
+outline:none;
+border-color:#0b6fa4;
+}
+/* FOOTER */
+
+footer{
+background:#0b6fa4;
+color:white;
+text-align:center;
+padding:15px;
+margin-top:30px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>CityCare Hospital</h1>
+</header>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="services.html">Services</a>
+<a href="doctors.html">Doctors</a>
+<a href="consultation.html">Consultation</a>
+<a href="pharmacy.html">Pharmacy</a>
+<a href="appointment.html">Appointment</a>
+<a href="about.html">About</a>
+<a href="contact.html">Contact</a>
+</nav>
+<div class="search">
+
+<input 
+type="text" 
+id="searchDoctor" 
+placeholder="Search doctor by name or specialization..." 
+onkeyup="searchDoctor()">
+
+</div>
+<div class="filter">
+
+<select id="specialtyFilter" onchange="filterDoctors()">
+<option value="all">All Specialists</option>
+<option value="cardio">Cardiologist</option>
+<option value="pediatric">Pediatrician</option>
+<option value="ortho">Orthopedic</option>
+<option value="neuro">Neurologist</option>
+<option value="derma">Dermatologist</option>
+</select>
+
+</div>
+
+<div class="container">
+
+<!-- Doctor 1 -->
+
+<div class="card cardio">
+<img src="https://randomuser.me/api/portraits/men/32.jpg">
+<h3>Dr. Ramesh Kumar</h3>
+<p>Cardiologist</p>
+<button onclick="openProfile('Dr. Ramesh Kumar','Cardiologist','15 Years','MBBS, MD Cardiology','Mon-Fri 9AM-2PM')">View Profile</button>
+</div>
+
+<!-- Doctor 2 -->
+
+<div class="card pediatric">
+<img src="https://randomuser.me/api/portraits/women/44.jpg">
+<h3>Dr. Anitha Rao</h3>
+<p>Pediatrician</p>
+<button onclick="openProfile('Dr. Anitha Rao','Pediatrician','12 Years','MBBS, MD Pediatrics','Mon-Sat 10AM-3PM')">View Profile</button>
+</div>
+
+<!-- Doctor 3 -->
+
+<div class="card ortho">
+<img src="https://randomuser.me/api/portraits/men/55.jpg">
+<h3>Dr. Suresh</h3>
+<p>Orthopedic Surgeon</p>
+<button onclick="openProfile('Dr. Suresh','Orthopedic Surgeon','14 Years','MBBS, MS Orthopedics','Mon-Fri 10AM-4PM')">View Profile</button>
+</div>
+
+<!-- Doctor 4 -->
+
+<div class="card neuro">
+<img src="https://randomuser.me/api/portraits/men/76.jpg">
+<h3>Dr. Arjun Patel</h3>
+<p>Neurologist</p>
+<button onclick="openProfile('Dr. Arjun Patel','Neurologist','16 Years','MBBS, DM Neurology','Tue-Sat 11AM-3PM')">View Profile</button>
+</div>
+
+<!-- Doctor 5 -->
+
+<div class="card derma">
+<img src="https://randomuser.me/api/portraits/women/52.jpg">
+<h3>Dr. Priya Sharma</h3>
+<p>Dermatologist</p>
+<button onclick="openProfile('Dr. Priya Sharma','Dermatologist','10 Years','MBBS, MD Dermatology','Mon-Fri 9AM-1PM')">View Profile</button>
+</div>
+
+<!-- Doctor 6 -->
+
+<div class="card cardio">
+<img src="https://randomuser.me/api/portraits/men/68.jpg">
+<h3>Dr. Rahul Verma</h3>
+<p>Cardiologist</p>
+<button onclick="openProfile('Dr. Rahul Verma','Cardiologist','11 Years','MBBS, DM Cardiology','Mon-Sat 10AM-5PM')">View Profile</button>
+</div>
+
+<!-- Doctor 7 -->
+
+<div class="card pediatric">
+<img src="https://randomuser.me/api/portraits/women/30.jpg">
+<h3>Dr. Neha Gupta</h3>
+<p>Pediatrician</p>
+<button onclick="openProfile('Dr. Neha Gupta','Pediatrician','9 Years','MBBS, MD Pediatrics','Mon-Fri 9AM-2PM')">View Profile</button>
+</div>
+
+<!-- Doctor 8 -->
+
+<div class="card ortho">
+<img src="https://randomuser.me/api/portraits/men/85.jpg">
+<h3>Dr. Vikram Singh</h3>
+<p>Orthopedic Surgeon</p>
+<button onclick="openProfile('Dr. Vikram Singh','Orthopedic Surgeon','13 Years','MBBS, MS Orthopedics','Mon-Fri 11AM-3PM')">View Profile</button>
+</div>
+
+</div>
+
+<!-- PROFILE MODAL -->
+
+<div id="profileModal" class="modal">
+
+<div class="modal-content">
+
+<span class="close" onclick="closeProfile()">&times;</span>
+
+<h2 id="docName"></h2>
+
+<p><b>Specialization:</b> <span id="docSpecial"></span></p>
+<p><b>Experience:</b> <span id="docExp"></span></p>
+<p><b>Qualification:</b> <span id="docQual"></span></p>
+<p><b>Available Time:</b> <span id="docTime"></span></p>
+
+<a href="appointment.html">
+<button>Book Appointment</button>
+</a>
+
+</div>
+
+</div>
+
+<footer>
+<p>© 2026 CityCare Hospital | 24/7 Emergency Care</p>
+<p>Phone: +91 98765 43210 | Email: citycarehospital@gmail.com</p>
+</footer>
+
+<script>
+
+/* FILTER */
+
+function filterDoctors(){
+
+let filter=document.getElementById("specialtyFilter").value;
+
+let doctors=document.querySelectorAll(".card");
+
+doctors.forEach(card=>{
+
+if(filter==="all" || card.classList.contains(filter)){
+card.style.display="block";
+}
+else{
+card.style.display="none";
+}
+
+});
+
+}
+
+/* PROFILE MODAL */
+
+function openProfile(name,special,exp,qual,time){
+
+document.getElementById("docName").innerText=name;
+document.getElementById("docSpecial").innerText=special;
+document.getElementById("docExp").innerText=exp;
+document.getElementById("docQual").innerText=qual;
+document.getElementById("docTime").innerText=time;
+
+document.getElementById("profileModal").style.display="flex";
+
+}
+
+function closeProfile(){
+
+document.getElementById("profileModal").style.display="none";
+
+}
+function searchDoctor(){
+
+let input=document.getElementById("searchDoctor").value.toLowerCase();
+
+let doctors=document.querySelectorAll(".card");
+
+doctors.forEach(card=>{
+
+let text=card.innerText.toLowerCase();
+
+if(text.includes(input)){
+card.style.display="block";
+}
+else{
+card.style.display="none";
+}
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
