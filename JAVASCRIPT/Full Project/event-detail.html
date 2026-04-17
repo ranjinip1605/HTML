@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Event Detail – Eventara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #F5F0E8; --ink: #1A1410; --rust: #C84B2F;
+      --gold: #D4A853; --sage: #4A6741; --muted: #7A6E62;
+      --card-bg: #FDFAF5; --border: #E2D9CC;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); }
+ 
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(245,240,232,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; color: var(--ink); text-decoration: none; }
+    .logo span { color: var(--rust); }
+    nav ul { list-style: none; display: flex; gap: 2.5rem; }
+    nav ul a { text-decoration: none; color: var(--ink); font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    nav ul a:hover { color: var(--rust); }
+    .nav-cta { background: var(--ink); color: var(--cream) !important; padding: 0.55rem 1.4rem; border-radius: 50px; }
+ 
+    /* HERO BANNER */
+    .event-hero {
+      height: 420px; position: relative;
+      display: flex; align-items: flex-end;
+      padding: 3rem 4rem;
+    }
+    .event-hero.music { background: linear-gradient(135deg, #0f0c29 0%, #302b63 60%, #24243e 100%); }
+    .event-hero.food  { background: linear-gradient(135deg, #134e5e 0%, #71b280 100%); }
+    .event-hero.art   { background: linear-gradient(135deg, #c94b4b 0%, #4b134f 100%); }
+    .event-hero.tech  { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); }
+    .event-hero.sport { background: linear-gradient(135deg, #005c97 0%, #363795 100%); }
+    .event-hero.film  { background: linear-gradient(135deg, #373b44 0%, #4286f4 100%); }
+    .event-hero.comedy{ background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%); }
+    .event-hero.dance { background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%); }
+ 
+    .hero-emoji {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -60%);
+      font-size: 8rem; opacity: 0.3;
+    }
+    .hero-overlay {
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+      position: absolute; inset: 0;
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .back-link {
+      position: absolute; top: 2rem; left: 4rem; z-index: 2;
+      color: rgba(255,255,255,0.7); text-decoration: none; font-size: 0.9rem;
+      display: flex; align-items: center; gap: 0.5rem;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: white; }
+    .event-cat-badge {
+      background: var(--rust); color: white;
+      font-size: 0.72rem; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 0.3rem 0.9rem; border-radius: 50px;
+      display: inline-block; margin-bottom: 1rem;
+    }
+    .event-hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 900;
+      color: white; line-height: 1.1; letter-spacing: -1px;
+      max-width: 700px;
+    }
+ 
+    /* CONTENT */
+    .event-layout {
+      display: grid; grid-template-columns: 1fr 360px;
+      gap: 3rem; padding: 3rem 4rem; max-width: 1300px; margin: 0 auto;
+    }
+ 
+    /* LEFT */
+    .event-main {}
+    .quick-facts {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      padding: 1.5rem; background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 16px; margin-bottom: 2rem;
+    }
+    .fact { display: flex; align-items: center; gap: 0.8rem; }
+    .fact-icon {
+      width: 42px; height: 42px; border-radius: 12px;
+      background: rgba(200,75,47,0.1); display: flex; align-items: center;
+      justify-content: center; font-size: 1.2rem;
+    }
+    .fact-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .fact-val { font-size: 0.92rem; font-weight: 500; margin-top: 0.1rem; }
+ 
+    .section-block { margin-bottom: 2.5rem; }
+    .section-block h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem; margin-bottom: 1rem; font-weight: 700;
+    }
+    .section-block p { color: var(--muted); line-height: 1.8; font-size: 0.95rem; }
+ 
+    .lineup { display: flex; flex-direction: column; gap: 0.8rem; }
+    .lineup-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.8rem 1rem; background: var(--card-bg);
+      border: 1px solid var(--border); border-radius: 12px;
+    }
+    .lineup-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; background: var(--ink);
+    }
+    .lineup-name { font-weight: 500; font-size: 0.92rem; }
+    .lineup-role { font-size: 0.78rem; color: var(--muted); }
+ 
+    .tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
+    .tag {
+      background: var(--card-bg); border: 1px solid var(--border);
+      padding: 0.35rem 0.9rem; border-radius: 50px;
+      font-size: 0.8rem; color: var(--muted);
+    }
+ 
+    /* SIDEBAR (booking widget) */
+    .booking-widget {
+      position: sticky; top: 90px; height: fit-content;
+    }
+    .widget-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+    }
+    .widget-header {
+      background: var(--ink); padding: 1.5rem;
+      color: white;
+    }
+    .widget-price {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem; font-weight: 700; color: var(--gold);
+    }
+    .widget-price-label { font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 0.2rem; }
+    .widget-body { padding: 1.5rem; }
+    .widget-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.8rem 0; border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    .widget-row:last-of-type { border-bottom: none; }
+    .widget-row .label { color: var(--muted); }
+    .widget-row .value { font-weight: 500; }
+    .spots-bar { margin: 1rem 0; }
+    .spots-label { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.4rem; }
+    .spots-label span:last-child { color: var(--rust); font-weight: 500; }
+    .bar-bg { background: var(--border); border-radius: 10px; height: 6px; }
+    .bar-fill { background: var(--rust); border-radius: 10px; height: 6px; transition: width 0.5s; }
+    .btn-book-main {
+      display: block; width: 100%; text-align: center;
+      background: var(--rust); color: white;
+      padding: 1rem; border-radius: 12px;
+      text-decoration: none; font-size: 1rem; font-weight: 500;
+      margin-top: 1.2rem; transition: background 0.2s, transform 0.2s;
+      cursor: pointer; border: none; font-family: 'DM Sans', sans-serif;
+    }
+    .btn-book-main:hover { background: #a83a20; transform: translateY(-1px); }
+    .widget-note { font-size: 0.78rem; color: var(--muted); text-align: center; margin-top: 0.8rem; }
+ 
+    .share-row { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
+    .share-btn {
+      flex: 1; padding: 0.6rem; border-radius: 10px;
+      border: 1.5px solid var(--border); background: none;
+      font-family: 'DM Sans', sans-serif; font-size: 0.82rem;
+      cursor: pointer; transition: all 0.2s; color: var(--ink);
+    }
+    .share-btn:hover { background: var(--ink); color: white; border-color: var(--ink); }
+ 
+    /* MAP PLACEHOLDER */
+    .map-placeholder {
+      height: 200px; border-radius: 16px; overflow: hidden;
+      background: var(--card-bg); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 0.5rem; color: var(--muted); font-size: 0.9rem;
+      margin-top: 2rem;
+    }
+ 
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      nav ul { display: none; }
+      .back-link { left: 1.5rem; }
+      .event-hero { padding: 2rem 1.5rem; height: 320px; }
+      .event-layout { grid-template-columns: 1fr; padding: 1.5rem; }
+      .booking-widget { position: static; }
+    }
+  </style>
+</head>
+<body>
+ 
+<nav>
+  <a href="index.html" class="logo">Event<span>ara</span></a>
+  <ul>
+    <li><a href="events.html">Browse Events</a></li>
+    <li><a href="index.html#categories">Categories</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="events.html" class="nav-cta">Book Now</a></li>
+  </ul>
+</nav>
+ 
+<a href="events.html" class="back-link">← Back to Events</a>
+ 
+<div id="eventHero" class="event-hero">
+  <div class="hero-emoji" id="heroEmoji"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="event-cat-badge" id="catBadge"></div>
+    <h1 class="event-hero-title" id="heroTitle">Loading event...</h1>
+  </div>
+</div>
+ 
+<div class="event-layout">
+  <div class="event-main">
+    <div class="quick-facts" id="quickFacts"></div>
+ 
+    <div class="section-block">
+      <h2>About This Event</h2>
+      <p id="eventDesc"></p>
+    </div>
+ 
+    <div class="section-block" id="lineupBlock">
+      <h2>Lineup / Performers</h2>
+      <div class="lineup" id="lineup"></div>
+    </div>
+ 
+    <div class="section-block">
+      <h2>What to Expect</h2>
+      <p id="expectDesc"></p>
+    </div>
+ 
+    <div class="section-block">
+      <h2>Tags</h2>
+      <div class="tags" id="tags"></div>
+    </div>
+ 
+    <div class="map-placeholder">
+      <span style="font-size:2rem">📍</span>
+      <span id="venueText">Venue location</span>
+      <span style="font-size:0.78rem">Open in Maps →</span>
+    </div>
+  </div>
+ 
+  <!-- BOOKING SIDEBAR -->
+  <aside class="booking-widget">
+    <div class="widget-card">
+      <div class="widget-header">
+        <div class="widget-price" id="widgetPrice"></div>
+        <div class="widget-price-label">per person</div>
+      </div>
+      <div class="widget-body">
+        <div class="widget-row">
+          <span class="label">📅 Date</span>
+          <span class="value" id="wDate"></span>
+        </div>
+        <div class="widget-row">
+          <span class="label">🕐 Time</span>
+          <span class="value" id="wTime"></span>
+        </div>
+        <div class="widget-row">
+          <span class="label">📍 Venue</span>
+          <span class="value" id="wVenue" style="text-align:right;max-width:180px"></span>
+        </div>
+ 
+        <div class="spots-bar">
+          <div class="spots-label">
+            <span>Availability</span>
+            <span id="spotsLabel"></span>
+          </div>
+          <div class="bar-bg">
+            <div class="bar-fill" id="spotsBar" style="width:70%"></div>
+          </div>
+        </div>
+ 
+        <a href="booking.html" id="bookBtn" class="btn-book-main">Reserve Your Spot →</a>
+        <div class="widget-note">🔒 Secure payment · Free cancellation up to 48hrs before</div>
+ 
+        <div class="share-row">
+          <button class="share-btn">📤 Share</button>
+          <button class="share-btn">♡ Save</button>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+ 
+<script>
+const events = {
+  1: { title:'Neon Nights Music Festival', cat:'music', emoji:'🎸', date:'Apr 20, 2026', time:'7:00 PM', venue:'Phoenix Arena, Mumbai', price:1200, spots:48, totalSpots:200,
+       desc:'Get ready for an electrifying night of live music featuring some of India\'s hottest indie and rock acts. Neon Nights brings together five incredible artists across two stages, with jaw-dropping light shows and immersive visuals.',
+       lineup:[{e:'🎸',name:'The Midnight Sons',role:'Headliner'},{e:'🎤',name:'Ananya Shah',role:'Opening Act'},{e:'🥁',name:'Electric Pulse Band',role:'Main Stage'}],
+       expect:'Expect 6+ hours of non-stop music, food stalls, merchandise, and an after-party till 2 AM. Dress to impress – the neon dress code is encouraged!',
+       tags:['#LiveMusic','#Rock','#Indie','#Mumbai','#Festival','#NightLife'] },
+ 
+  2: { title:'Garden Gourmet Food Festival', cat:'food', emoji:'🍽️', date:'Apr 22, 2026', time:'11:00 AM', venue:'Cubbon Park, Bangalore', price:800, spots:120, totalSpots:300,
+       desc:'A lush, open-air celebration of food from across the country. Over 40 curated stalls will offer regional delicacies, artisanal products, live cooking demonstrations, and a craft beverage garden.',
+       lineup:[{e:'👨‍🍳',name:'Chef Vivek Singhania',role:'Celebrity Chef Demo'},{e:'🌿',name:'Priya Nair',role:'Farm-to-Table Expert'},{e:'🍷',name:'Sommelier Arjun Roy',role:'Wine & Pairing'}],
+       expect:'A relaxed afternoon under the trees with family-friendly activities, live acoustic music, cooking workshops, and a special dessert trail.',
+       tags:['#FoodFestival','#Bangalore','#Gourmet','#OpenAir','#FamilyFriendly'] },
+ 
+  3: { title:'Crimson Canvas Art Expo', cat:'art', emoji:'🎨', date:'Apr 25, 2026', time:'10:00 AM', venue:'NGMA, Delhi', price:0, spots:0, totalSpots:0,
+       desc:'A free exhibition bringing together 80+ emerging artists from across India. Crimson Canvas explores themes of identity, memory, and transformation through paintings, sculptures, digital art, and installations.',
+       lineup:[{e:'🎨',name:'Meera Krishnan',role:'Lead Curator'},{e:'🖼️',name:'Dhruv Ohatkar',role:'Featured Artist'},{e:'📸',name:'Leila Kapoor',role:'Photography Series'}],
+       expect:'Three floors of immersive art, guided tours on weekends, artist meet-and-greets, and an interactive mural wall where visitors can contribute.',
+       tags:['#ArtExhibition','#Delhi','#FreeEntry','#ContemporaryArt','#Emerging'] },
+ 
+  4: { title:'DevSummit India 2026', cat:'tech', emoji:'💻', date:'May 1, 2026', time:'9:00 AM', venue:'HICC, Hyderabad', price:2500, spots:22, totalSpots:500,
+       desc:'India\'s premier developer conference, bringing together 3,000+ engineers, designers, and product leaders for two days of workshops, keynotes, and networking.',
+       lineup:[{e:'💡',name:'Prashant Verma',role:'Keynote Speaker – AI'},{e:'🛠️',name:'Sarah Chen',role:'Workshop: React Advanced'},{e:'🚀',name:'Rahul Gupta',role:'Panel: Open Source'}],
+       expect:'Packed schedule of 50+ sessions across tracks: Frontend, Backend, DevOps, AI/ML, and Open Source. Swag bags, networking dinner, and a hackathon on Day 2.',
+       tags:['#Tech','#Developers','#AI','#Hyderabad','#Conference','#Networking'] },
+ 
+  5: { title:'City Marathon 2026', cat:'sports', emoji:'🏃', date:'May 5, 2026', time:'4:00 AM', venue:'Marine Drive, Mumbai', price:600, spots:200, totalSpots:5000,
+       desc:'Mumbai\'s annual marathon returns, now bigger than ever. The route takes you along the iconic Marine Drive, through Bandra, and back — 42km of pure endurance and community spirit.',
+       lineup:[{e:'🏆',name:'Elite Category',role:'Professional runners'},{e:'🏅',name:'Amateur Category',role:'Open to all'},{e:'🚶',name:'5K Walk',role:'Family-friendly option'}],
+       expect:'Hydration stations every 2.5km, pacers for all speed groups, live bands along the route, and a grand finisher medal ceremony.',
+       tags:['#Marathon','#Mumbai','#Running','#Fitness','#Community','#Sports'] },
+ 
+  6: { title:'International Film Festival', cat:'film', emoji:'🎬', date:'May 8, 2026', time:'6:30 PM', venue:'Siri Fort Auditorium, Delhi', price:350, spots:35, totalSpots:400,
+       desc:'A five-day celebration of world cinema, featuring award-winning films from 40+ countries. From gripping documentaries to avant-garde shorts, every screening is followed by a Q&A with filmmakers.',
+       lineup:[{e:'🎥',name:'Nalini Sharma',role:'Festival Director'},{e:'🌍',name:'Global Auteurs',role:'Directors\' Showcase'},{e:'📽️',name:'Indian Shorts Program',role:'Emerging Voices'}],
+       expect:'Themed film nights, retrospectives, panel discussions with critics, and a closing gala with the festival\'s Grand Jury award ceremony.',
+       tags:['#FilmFestival','#Cinema','#Delhi','#WorldCinema','#Documentary'] },
+};
+ 
+const params = new URLSearchParams(location.search);
+const id = params.get('id') || 1;
+const ev = events[id] || events[1];
+ 
+// Set hero
+document.getElementById('eventHero').classList.add(ev.cat === 'sports' ? 'sport' : ev.cat);
+document.getElementById('heroEmoji').textContent = ev.emoji;
+document.getElementById('catBadge').textContent = ev.cat.charAt(0).toUpperCase() + ev.cat.slice(1);
+document.getElementById('heroTitle').textContent = ev.title;
+document.title = ev.title + ' – Eventara';
+ 
+// Quick facts
+document.getElementById('quickFacts').innerHTML = `
+  <div class="fact"><div class="fact-icon">📅</div><div><div class="fact-label">Date</div><div class="fact-val">${ev.date}</div></div></div>
+  <div class="fact"><div class="fact-icon">🕐</div><div><div class="fact-label">Time</div><div class="fact-val">${ev.time}</div></div></div>
+  <div class="fact"><div class="fact-icon">📍</div><div><div class="fact-label">Venue</div><div class="fact-val">${ev.venue}</div></div></div>
+  <div class="fact"><div class="fact-icon">💳</div><div><div class="fact-label">Price</div><div class="fact-val">${ev.price === 0 ? 'Free Entry' : '₹' + ev.price.toLocaleString()}</div></div></div>
+`;
+ 
+document.getElementById('eventDesc').textContent = ev.desc;
+document.getElementById('expectDesc').textContent = ev.expect;
+document.getElementById('venueText').textContent = ev.venue;
+ 
+// Lineup
+document.getElementById('lineup').innerHTML = ev.lineup.map(l => `
+  <div class="lineup-item">
+    <div class="lineup-avatar">${l.e}</div>
+    <div><div class="lineup-name">${l.name}</div><div class="lineup-role">${l.role}</div></div>
+  </div>
+`).join('');
+ 
+// Tags
+document.getElementById('tags').innerHTML = ev.tags.map(t => `<span class="tag">${t}</span>`).join('');
+ 
+// Widget
+document.getElementById('widgetPrice').textContent = ev.price === 0 ? 'Free' : '₹' + ev.price.toLocaleString();
+document.getElementById('wDate').textContent = ev.date;
+document.getElementById('wTime').textContent = ev.time;
+document.getElementById('wVenue').textContent = ev.venue;
+ 
+if (ev.spots === 0 && ev.totalSpots === 0) {
+  document.getElementById('spotsLabel').textContent = 'Open entry';
+  document.getElementById('spotsBar').style.width = '30%';
+} else {
+  const pct = Math.round((ev.spots / ev.totalSpots) * 100);
+  document.getElementById('spotsLabel').textContent = `${ev.spots} spots left`;
+  document.getElementById('spotsBar').style.width = pct + '%';
+}
+ 
+document.getElementById('bookBtn').href = `booking.html?id=${id}`;
+</script>
+</body>
+</html>

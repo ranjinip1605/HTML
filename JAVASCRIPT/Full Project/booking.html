@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book Tickets – Eventara</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #F5F0E8; --ink: #1A1410; --rust: #C84B2F;
+      --gold: #D4A853; --sage: #4A6741; --muted: #7A6E62;
+      --card-bg: #FDFAF5; --border: #E2D9CC; --error: #e53e3e;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; }
+ 
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 4rem;
+      background: rgba(245,240,232,0.92); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; color: var(--ink); text-decoration: none; }
+    .logo span { color: var(--rust); }
+    nav ul { list-style: none; display: flex; gap: 2.5rem; }
+    nav ul a { text-decoration: none; color: var(--ink); font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+    nav ul a:hover { color: var(--rust); }
+    .nav-cta { background: var(--ink); color: var(--cream) !important; padding: 0.55rem 1.4rem; border-radius: 50px; }
+ 
+    /* PROGRESS BAR */
+    .progress-wrap {
+      background: var(--card-bg); border-bottom: 1px solid var(--border);
+      padding: 1.2rem 4rem;
+    }
+    .progress-steps { display: flex; align-items: center; gap: 0; max-width: 600px; margin: 0 auto; }
+    .step {
+      display: flex; align-items: center; gap: 0.6rem;
+      flex: 1; position: relative;
+    }
+    .step-num {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; font-weight: 500;
+      background: var(--border); color: var(--muted);
+      transition: all 0.3s; flex-shrink: 0;
+    }
+    .step.active .step-num { background: var(--rust); color: white; }
+    .step.done .step-num { background: var(--sage); color: white; }
+    .step-label { font-size: 0.82rem; color: var(--muted); }
+    .step.active .step-label { color: var(--ink); font-weight: 500; }
+    .step-line { flex: 1; height: 2px; background: var(--border); margin: 0 0.5rem; }
+    .step-line.done { background: var(--sage); }
+ 
+    /* MAIN LAYOUT */
+    .booking-layout {
+      display: grid; grid-template-columns: 1fr 360px;
+      gap: 2.5rem; padding: 3rem 4rem; max-width: 1200px; margin: 0 auto;
+    }
+ 
+    /* STEPS */
+    .booking-step { display: none; }
+    .booking-step.active { display: block; animation: fadeUp 0.4s ease; }
+ 
+    .form-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 20px; padding: 2rem;
+    }
+    .form-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; margin-bottom: 0.4rem;
+    }
+    .form-card .subtitle { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+ 
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 0.82rem; font-weight: 500; color: var(--ink); }
+    input, select, textarea {
+      padding: 0.75rem 1rem;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      font-family: 'DM Sans', sans-serif; font-size: 0.92rem; color: var(--ink);
+      background: white; outline: none; transition: border-color 0.2s;
+    }
+    input:focus, select:focus, textarea:focus { border-color: var(--rust); }
+    input.error, select.error { border-color: var(--error); }
+    .err-msg { font-size: 0.75rem; color: var(--error); display: none; }
+    .err-msg.show { display: block; }
+    textarea { resize: vertical; min-height: 80px; }
+ 
+    .ticket-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+    .ticket-option {
+      border: 2px solid var(--border); border-radius: 14px; padding: 1.2rem;
+      cursor: pointer; transition: all 0.25s; background: white;
+    }
+    .ticket-option:hover { border-color: var(--rust); }
+    .ticket-option.selected { border-color: var(--rust); background: rgba(200,75,47,0.05); }
+    .ticket-option h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.3rem; }
+    .ticket-option p { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.5rem; }
+    .ticket-option .t-price { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--rust); }
+ 
+    .qty-control { display: flex; align-items: center; gap: 0.8rem; margin-top: 0.5rem; }
+    .qty-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 1.5px solid var(--border); background: white;
+      font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .qty-btn:hover { background: var(--ink); color: white; border-color: var(--ink); }
+    .qty-num { font-size: 1.1rem; font-weight: 600; min-width: 24px; text-align: center; }
+ 
+    /* PAYMENT */
+    .payment-methods { display: flex; gap: 0.8rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .pay-method {
+      border: 2px solid var(--border); border-radius: 12px; padding: 0.8rem 1.2rem;
+      cursor: pointer; transition: all 0.2s; background: white;
+      display: flex; align-items: center; gap: 0.6rem; font-size: 0.88rem;
+    }
+    .pay-method:hover { border-color: var(--rust); }
+    .pay-method.selected { border-color: var(--rust); background: rgba(200,75,47,0.05); }
+    .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+ 
+    /* NAV BUTTONS */
+    .form-nav { display: flex; justify-content: space-between; margin-top: 2rem; gap: 1rem; }
+    .btn-back {
+      padding: 0.85rem 2rem; border-radius: 50px;
+      border: 1.5px solid var(--ink); background: none; color: var(--ink);
+      font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-back:hover { background: var(--ink); color: white; }
+    .btn-next {
+      padding: 0.85rem 2rem; border-radius: 50px;
+      background: var(--rust); color: white; border: none;
+      font-family: 'DM Sans', sans-serif; font-size: 0.95rem; font-weight: 500;
+      cursor: pointer; transition: all 0.2s; flex: 1;
+      box-shadow: 0 4px 20px rgba(200,75,47,0.3);
+    }
+    .btn-next:hover { background: #a83a20; transform: translateY(-1px); }
+    .btn-next:disabled { background: var(--border); color: var(--muted); box-shadow: none; transform: none; cursor: not-allowed; }
+ 
+    /* ORDER SUMMARY SIDEBAR */
+    .order-sidebar { position: sticky; top: 90px; height: fit-content; }
+    .summary-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 20px; overflow: hidden;
+    }
+    .summary-header {
+      background: var(--ink); padding: 1.2rem 1.5rem; color: white;
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .summary-header h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; }
+    .summary-event-icon { font-size: 1.8rem; }
+    .summary-body { padding: 1.5rem; }
+    .summary-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.6rem 0; font-size: 0.9rem;
+    }
+    .summary-row .s-label { color: var(--muted); }
+    .summary-divider { border: none; border-top: 1px solid var(--border); margin: 0.5rem 0; }
+    .summary-total {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.8rem 0; font-weight: 600;
+    }
+    .summary-total .amount {
+      font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--rust);
+    }
+    .trust-badges { display: flex; flex-direction: column; gap: 0.5rem; margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--border); }
+    .trust-badge { display: flex; align-items: center; gap: 0.6rem; font-size: 0.8rem; color: var(--muted); }
+ 
+    /* SUCCESS STATE */
+    .success-screen {
+      text-align: center; padding: 3rem 2rem;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 20px; display: none;
+    }
+    .success-icon { font-size: 4rem; margin-bottom: 1rem; }
+    .success-screen h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 0.5rem; }
+    .success-screen p { color: var(--muted); max-width: 400px; margin: 0 auto 2rem; line-height: 1.7; }
+    .ticket-preview {
+      background: var(--ink); color: white; border-radius: 16px;
+      padding: 1.5rem; max-width: 400px; margin: 0 auto 2rem; text-align: left;
+    }
+    .tp-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
+    .tp-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; }
+    .tp-price { color: var(--gold); font-size: 1.3rem; font-weight: 700; }
+    .tp-details { display: flex; gap: 1.5rem; }
+    .tp-d { font-size: 0.78rem; color: rgba(255,255,255,0.5); }
+    .tp-d strong { display: block; color: white; }
+    .tp-barcode { margin-top: 1.2rem; padding-top: 1rem; border-top: 1px dashed rgba(255,255,255,0.2); font-size: 0.65rem; color: rgba(255,255,255,0.3); letter-spacing: 3px; text-align: center; }
+    .success-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: var(--rust); color: white; padding: 0.85rem 2rem; border-radius: 50px; text-decoration: none; font-weight: 500; transition: background 0.2s; }
+    .btn-primary:hover { background: #a83a20; }
+    .btn-sec { border: 1.5px solid var(--ink); color: var(--ink); padding: 0.85rem 2rem; border-radius: 50px; text-decoration: none; font-weight: 500; transition: all 0.2s; }
+    .btn-sec:hover { background: var(--ink); color: white; }
+ 
+    @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+ 
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.5rem; }
+      nav ul { display: none; }
+      .progress-wrap { padding: 1rem 1.5rem; }
+      .booking-layout { grid-template-columns: 1fr; padding: 1.5rem; }
+      .order-sidebar { position: static; }
+      .form-row { grid-template-columns: 1fr; }
+      .ticket-type-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+ 
+<nav>
+  <a href="index.html" class="logo">Event<span>ara</span></a>
+  <ul>
+    <li><a href="events.html">Browse Events</a></li>
+    <li><a href="index.html#categories">Categories</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="events.html" class="nav-cta">Book Now</a></li>
+  </ul>
+</nav>
+ 
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-steps">
+    <div class="step active" id="step-ind-1">
+      <div class="step-num">1</div>
+      <div class="step-label">Tickets</div>
+    </div>
+    <div class="step-line" id="line-1"></div>
+    <div class="step" id="step-ind-2">
+      <div class="step-num">2</div>
+      <div class="step-label">Details</div>
+    </div>
+    <div class="step-line" id="line-2"></div>
+    <div class="step" id="step-ind-3">
+      <div class="step-num">3</div>
+      <div class="step-label">Payment</div>
+    </div>
+    <div class="step-line" id="line-3"></div>
+    <div class="step" id="step-ind-4">
+      <div class="step-num">✓</div>
+      <div class="step-label">Confirmed</div>
+    </div>
+  </div>
+</div>
+ 
+<div class="booking-layout">
+  <div>
+    <!-- STEP 1: TICKETS -->
+    <div class="booking-step active" id="step1">
+      <div class="form-card">
+        <h2>Choose Your Tickets</h2>
+        <p class="subtitle">Select ticket type and quantity</p>
+ 
+        <div class="ticket-type-grid">
+          <div class="ticket-option selected" onclick="selectTicket(this, 'General', 1200)">
+            <h4>General Admission</h4>
+            <p>Access to all main stage performances and general areas</p>
+            <div class="t-price">₹1,200</div>
+          </div>
+          <div class="ticket-option" onclick="selectTicket(this, 'VIP', 2800)">
+            <h4>VIP Experience</h4>
+            <p>Priority entry, VIP lounge, dedicated bar & premium viewing area</p>
+            <div class="t-price">₹2,800</div>
+          </div>
+        </div>
+ 
+        <div class="form-group">
+          <label>Number of Tickets</label>
+          <div class="qty-control">
+            <button class="qty-btn" onclick="changeQty(-1)">−</button>
+            <div class="qty-num" id="qtyDisplay">1</div>
+            <button class="qty-btn" onclick="changeQty(1)">+</button>
+            <span style="color:var(--muted);font-size:0.85rem">Max 10 per booking</span>
+          </div>
+        </div>
+ 
+        <div class="form-nav">
+          <a href="javascript:history.back()" class="btn-back">← Back</a>
+          <button class="btn-next" onclick="goStep(2)">Continue to Details →</button>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- STEP 2: DETAILS -->
+    <div class="booking-step" id="step2">
+      <div class="form-card">
+        <h2>Your Details</h2>
+        <p class="subtitle">Fill in your information to complete the booking</p>
+ 
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name *</label>
+            <input type="text" id="firstName" placeholder="Ranjini">
+            <span class="err-msg" id="err-firstName">Please enter your first name</span>
+          </div>
+          <div class="form-group">
+            <label>Last Name *</label>
+            <input type="text" id="lastName" placeholder="Sharma">
+            <span class="err-msg" id="err-lastName">Please enter your last name</span>
+          </div>
+        </div>
+ 
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input type="email" id="email" placeholder="you@email.com">
+          <span class="err-msg" id="err-email">Please enter a valid email</span>
+        </div>
+ 
+        <div class="form-group">
+          <label>Phone Number *</label>
+          <input type="tel" id="phone" placeholder="+91 98765 43210">
+          <span class="err-msg" id="err-phone">Please enter your phone number</span>
+        </div>
+ 
+        <div class="form-group">
+          <label>City *</label>
+          <select id="city">
+            <option value="">Select your city</option>
+            <option>Mumbai</option>
+            <option>Delhi</option>
+            <option>Bangalore</option>
+            <option>Hyderabad</option>
+            <option>Chennai</option>
+            <option>Pune</option>
+            <option>Other</option>
+          </select>
+          <span class="err-msg" id="err-city">Please select your city</span>
+        </div>
+ 
+        <div class="form-group">
+          <label>Special Requests (optional)</label>
+          <textarea id="requests" placeholder="Accessibility needs, dietary requirements, etc."></textarea>
+        </div>
+ 
+        <div class="form-nav">
+          <button class="btn-back" onclick="goStep(1)">← Back</button>
+          <button class="btn-next" onclick="validateStep2()">Continue to Payment →</button>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- STEP 3: PAYMENT -->
+    <div class="booking-step" id="step3">
+      <div class="form-card">
+        <h2>Payment</h2>
+        <p class="subtitle">Your payment is encrypted and secure</p>
+ 
+        <div style="margin-bottom:1.2rem">
+          <label style="display:block;margin-bottom:0.8rem">Payment Method</label>
+          <div class="payment-methods">
+            <div class="pay-method selected" onclick="selectPay(this)">💳 Card</div>
+            <div class="pay-method" onclick="selectPay(this)">📱 UPI</div>
+            <div class="pay-method" onclick="selectPay(this)">🏦 Net Banking</div>
+            <div class="pay-method" onclick="selectPay(this)">💰 Wallets</div>
+          </div>
+        </div>
+ 
+        <div id="cardFields">
+          <div class="form-group">
+            <label>Card Number *</label>
+            <input type="text" id="cardNum" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)">
+            <span class="err-msg" id="err-cardNum">Please enter a valid card number</span>
+          </div>
+          <div class="card-row">
+            <div class="form-group">
+              <label>Expiry Date *</label>
+              <input type="text" id="expiry" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)">
+              <span class="err-msg" id="err-expiry">Please enter expiry date</span>
+            </div>
+            <div class="form-group">
+              <label>CVV *</label>
+              <input type="password" id="cvv" placeholder="•••" maxlength="3">
+              <span class="err-msg" id="err-cvv">Please enter CVV</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Name on Card *</label>
+            <input type="text" id="cardName" placeholder="As printed on card">
+            <span class="err-msg" id="err-cardName">Please enter cardholder name</span>
+          </div>
+        </div>
+ 
+        <div class="form-nav">
+          <button class="btn-back" onclick="goStep(2)">← Back</button>
+          <button class="btn-next" onclick="confirmPayment()" id="payBtn">🔒 Pay & Confirm →</button>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- SUCCESS -->
+    <div class="success-screen" id="successScreen">
+      <div class="success-icon">🎉</div>
+      <h2>Booking Confirmed!</h2>
+      <p>Your tickets have been booked successfully. A confirmation email has been sent to your inbox.</p>
+ 
+      <div class="ticket-preview" id="ticketPreview"></div>
+ 
+      <div class="success-btns">
+        <a href="index.html" class="btn-primary">Back to Home</a>
+        <a href="events.html" class="btn-sec">Browse More Events</a>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- ORDER SUMMARY -->
+  <aside class="order-sidebar" id="orderSidebar">
+    <div class="summary-card">
+      <div class="summary-header">
+        <div class="summary-event-icon" id="summaryIcon">🎸</div>
+        <div>
+          <h3 id="summaryTitle">Neon Nights Festival</h3>
+          <div style="font-size:0.78rem;color:rgba(255,255,255,0.5)" id="summaryDate">Apr 20, 2026</div>
+        </div>
+      </div>
+      <div class="summary-body">
+        <div class="summary-row">
+          <span class="s-label">Ticket Type</span>
+          <span id="summaryType">General</span>
+        </div>
+        <div class="summary-row">
+          <span class="s-label">Quantity</span>
+          <span id="summaryQty">1</span>
+        </div>
+        <div class="summary-row">
+          <span class="s-label">Unit Price</span>
+          <span id="summaryUnit">₹1,200</span>
+        </div>
+        <hr class="summary-divider">
+        <div class="summary-row">
+          <span class="s-label">Subtotal</span>
+          <span id="summarySubtotal">₹1,200</span>
+        </div>
+        <div class="summary-row">
+          <span class="s-label">Platform Fee (2%)</span>
+          <span id="summaryFee">₹24</span>
+        </div>
+        <hr class="summary-divider">
+        <div class="summary-total">
+          <span>Total</span>
+          <span class="amount" id="summaryTotal">₹1,224</span>
+        </div>
+ 
+        <div class="trust-badges">
+          <div class="trust-badge">🔒 256-bit SSL encryption</div>
+          <div class="trust-badge">✅ Instant confirmation email</div>
+          <div class="trust-badge">🔄 Free cancellation (48hrs)</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+ 
+<script>
+const params = new URLSearchParams(location.search);
+const id = params.get('id') || 1;
+ 
+const events = {
+  1: { title:'Neon Nights Festival', emoji:'🎸', date:'Apr 20, 2026', venue:'Phoenix Arena, Mumbai', price:1200 },
+  2: { title:'Garden Gourmet', emoji:'🍽️', date:'Apr 22, 2026', venue:'Cubbon Park, Bangalore', price:800 },
+  3: { title:'Crimson Canvas', emoji:'🎨', date:'Apr 25, 2026', venue:'NGMA, Delhi', price:0 },
+  4: { title:'DevSummit 2026', emoji:'💻', date:'May 1, 2026', venue:'HICC, Hyderabad', price:2500 },
+  5: { title:'City Marathon', emoji:'🏃', date:'May 5, 2026', venue:'Marine Drive, Mumbai', price:600 },
+  6: { title:'Int\'l Film Festival', emoji:'🎬', date:'May 8, 2026', venue:'Siri Fort, Delhi', price:350 },
+};
+const ev = events[id] || events[1];
+ 
+document.getElementById('summaryIcon').textContent = ev.emoji;
+document.getElementById('summaryTitle').textContent = ev.title;
+document.getElementById('summaryDate').textContent = ev.date;
+ 
+let ticketType = 'General';
+let ticketPrice = ev.price;
+let qty = 1;
+let currentStep = 1;
+ 
+function updateSummary() {
+  const sub = ticketPrice * qty;
+  const fee = Math.round(sub * 0.02);
+  const total = sub + fee;
+  document.getElementById('summaryType').textContent = ticketType;
+  document.getElementById('summaryQty').textContent = qty;
+  document.getElementById('summaryUnit').textContent = ticketPrice === 0 ? 'Free' : '₹' + ticketPrice.toLocaleString();
+  document.getElementById('summarySubtotal').textContent = sub === 0 ? 'Free' : '₹' + sub.toLocaleString();
+  document.getElementById('summaryFee').textContent = fee === 0 ? 'Free' : '₹' + fee;
+  document.getElementById('summaryTotal').textContent = total === 0 ? 'Free' : '₹' + total.toLocaleString();
+}
+ 
+function selectTicket(el, type, basePrice) {
+  document.querySelectorAll('.ticket-option').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  ticketType = type;
+  ticketPrice = basePrice;
+  updateSummary();
+}
+ 
+function changeQty(d) {
+  qty = Math.max(1, Math.min(10, qty + d));
+  document.getElementById('qtyDisplay').textContent = qty;
+  document.getElementById('summaryQty').textContent = qty;
+  updateSummary();
+}
+ 
+function selectPay(el) {
+  document.querySelectorAll('.pay-method').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+}
+ 
+function goStep(n) {
+  document.querySelectorAll('.booking-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+ 
+  // Update progress indicators
+  [1,2,3,4].forEach(i => {
+    const ind = document.getElementById('step-ind-' + i);
+    const line = document.getElementById('line-' + i);
+    if (i < n) { ind.classList.add('done'); ind.classList.remove('active'); }
+    else if (i === n) { ind.classList.add('active'); ind.classList.remove('done'); }
+    else { ind.classList.remove('active','done'); }
+    if (line && i < n) line.classList.add('done');
+    else if (line) line.classList.remove('done');
+  });
+ 
+  currentStep = n;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+ 
+function validateStep2() {
+  let ok = true;
+  const fields = ['firstName','lastName','email','phone','city'];
+  fields.forEach(f => {
+    const el = document.getElementById(f);
+    const err = document.getElementById('err-' + f);
+    if (!el.value.trim()) {
+      el.classList.add('error'); err.classList.add('show'); ok = false;
+    } else {
+      el.classList.remove('error'); err.classList.remove('show');
+    }
+  });
+  // Email check
+  const emailEl = document.getElementById('email');
+  if (emailEl.value && !/\S+@\S+\.\S+/.test(emailEl.value)) {
+    emailEl.classList.add('error');
+    document.getElementById('err-email').classList.add('show');
+    ok = false;
+  }
+  if (ok) goStep(3);
+}
+ 
+function formatCard(el) {
+  let v = el.value.replace(/\D/g, '').substring(0, 16);
+  el.value = v.replace(/(.{4})/g, '$1 ').trim();
+}
+ 
+function formatExpiry(el) {
+  let v = el.value.replace(/\D/g, '');
+  if (v.length >= 2) v = v.substring(0,2) + ' / ' + v.substring(2,4);
+  el.value = v;
+}
+ 
+function confirmPayment() {
+  const btn = document.getElementById('payBtn');
+  btn.textContent = '⏳ Processing...';
+  btn.disabled = true;
+ 
+  setTimeout(() => {
+    // Show success
+    document.getElementById('step3').classList.remove('active');
+    document.getElementById('orderSidebar').style.display = 'none';
+    const ss = document.getElementById('successScreen');
+    ss.style.display = 'block';
+ 
+    // Update step indicators
+    [1,2,3].forEach(i => {
+      document.getElementById('step-ind-' + i).classList.add('done');
+      document.getElementById('step-ind-' + i).classList.remove('active');
+      const line = document.getElementById('line-' + i);
+      if (line) line.classList.add('done');
+    });
+    document.getElementById('step-ind-4').classList.add('active');
+ 
+    const sub = ticketPrice * qty;
+    const fee = Math.round(sub * 0.02);
+    const total = sub + fee;
+    const refCode = 'EVT-' + Date.now().toString().slice(-6);
+ 
+    document.getElementById('ticketPreview').innerHTML = `
+      <div class="tp-top">
+        <div>
+          <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);letter-spacing:1px;text-transform:uppercase;margin-bottom:0.3rem">Your Ticket</div>
+          <div class="tp-name">${ev.title}</div>
+        </div>
+        <div class="tp-price">${total === 0 ? 'Free' : '₹' + total.toLocaleString()}</div>
+      </div>
+      <div class="tp-details">
+        <div class="tp-d"><strong>${ev.date}</strong>Date</div>
+        <div class="tp-d"><strong>${ticketType}</strong>Type</div>
+        <div class="tp-d"><strong>${qty}</strong>Qty</div>
+      </div>
+      <div class="tp-barcode">||| || | ||| || ||| | || ||| | || |||<br>${refCode}</div>
+    `;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 2000);
+}
+ 
+updateSummary();
+</script>
+</body>
+</html>
